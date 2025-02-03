@@ -1,0 +1,27 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "clang++",
+            "args": [
+                "-std=c++17",
+                "-I/opt/homebrew/Cellar/tgui/1.7.0_1/include",
+                "-I/opt/homebrew/Cellar/sfml/3.0.0/include",
+                "-L/opt/homebrew/Cellar/tgui/1.7.0_1/lib",
+                "-L/opt/homebrew/Cellar/sfml/3.0.0/lib",
+                "-ltgui",
+                "-lsfml-graphics", "-lsfml-window", "-lsfml-system",
+                "-o",
+                "src/main",
+                "src/main.cpp",
+                "src/GameOfLife.cpp"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
