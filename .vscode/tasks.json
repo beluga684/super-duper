@@ -14,8 +14,8 @@
                 "-ltgui",
                 "-lsfml-graphics", "-lsfml-window", "-lsfml-system",
                 "-o",
-                "src/main",
-                "src/main.cpp",
+                "main",
+                "main.cpp",
                 "src/GameOfLife.cpp"
             ],
             "group": {

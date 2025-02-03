@@ -1,6 +1,6 @@
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
-#include "GameOfLife.h"
+#include "src/GameOfLife.h"
 
 const int CELL_SIZE = 10;
 const int GRID_WIDTH = 80;
@@ -8,7 +8,7 @@ const int GRID_HEIGHT = 60;
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode({GRID_WIDTH * CELL_SIZE, GRID_HEIGHT * CELL_SIZE}), "клеточный автомат");
+    sf::RenderWindow window(sf::VideoMode({GRID_WIDTH * CELL_SIZE, GRID_HEIGHT * CELL_SIZE}), "game of life");
     tgui::Gui gui{window};
 
     GameOfLife game(GRID_WIDTH, GRID_HEIGHT);
