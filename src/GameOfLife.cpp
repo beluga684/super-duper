@@ -19,8 +19,8 @@ void GameOfLife::update() {
             }
         }
     }
-
     grid = nextGrid;
+    generationCount++;
 }
 
 void GameOfLife::toggleCell(int x, int y) {
@@ -31,6 +31,7 @@ void GameOfLife::toggleCell(int x, int y) {
 void GameOfLife::clear() {
     for (auto& row : grid)
         row.assign(width, false);
+    generationCount = 0;
 }
 
 bool GameOfLife::isAlive(int x, int y) const {
@@ -49,5 +50,14 @@ int GameOfLife::countNeighbors(int x, int y) const {
                 count++;
         }
     }
+    return count;
+}
+
+int GameOfLife::getAliveCells() const {
+    int count = 0;
+    for (const auto& row : grid)
+        for (bool cell : row)
+            if (cell)
+                count++;
     return count;
 }

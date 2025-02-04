@@ -7,15 +7,17 @@ class GameOfLife {
 public:
     GameOfLife(int width, int height);
 
-    void update();
-    void toggleCell(int x, int y);
-    void clear();
-    bool isAlive(int x, int y) const;
-    int getWidth() const { return width; }
-    int getHeight() const { return height; }
+    void update(); // обновление региона
+    void toggleCell(int x, int y); // изменение клетки
+    void clear(); // рестарт
+    bool isAlive(int x, int y) const; // проверка клетки
+
+    int getGeneration() const {return generationCount;}
+    int getAliveCells() const;
 
 private:
     int width, height;
+    int generationCount = 0;
     std::vector<std::vector<bool>> grid;
     std::vector<std::vector<bool>> nextGrid;
     
