@@ -6,6 +6,16 @@ const int CELL_SIZE = 10;
 const int GRID_WIDTH = 80;
 const int GRID_HEIGHT = 60;
 
+sf::Vector2i hoveringPos({-1, -1});
+std::vector<std::vector<int>> selectedPat;
+bool isPatternChecked = false;
+
+const std::vector<std::vector<int>> PAT_GLIDER = {
+    {0, 1, 0},
+    {0, 0, 1},
+    {1, 1, 1}
+};
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode({GRID_WIDTH * CELL_SIZE, GRID_HEIGHT * CELL_SIZE}), "game of life");
@@ -25,6 +35,11 @@ int main()
     resetButton->setSize("5%","5%");
     resetButton->setPosition("12%","5%");
     gui.add(resetButton);
+
+    auto gliderButton = tgui::Button::create("глайдер");
+    gliderButton->setSize({"10%","5%"});
+    gliderButton->setPosition({"50%","50%"});
+    gui.add(gliderButton);
 
     // Слайдер скорости
     auto speedSlider = tgui::Slider::create(10, 200);
@@ -62,6 +77,11 @@ int main()
         startButton->setText("▶");
     });
 
+    gliderButton->onPress([&]() {
+        isPatternChecked = true;
+        selectedPat = PAT_GLIDER;
+    });
+
     speedSlider->onValueChange([&](float value) {
         updateDelay = static_cast<int>(value);
         speedLabel->setText("Задержка (мс): " + std::to_string(updateDelay));
@@ -77,13 +97,26 @@ int main()
             if (event.is<sf::Event::Closed>())
                 window.close();
 
+            if (const auto* mouseMoved = event.getIf<sf::Event::MouseMoved>()) {
+                hoveringPos.x = mouseMoved->position.x / CELL_SIZE;
+                hoveringPos.y = mouseMoved->position.y / CELL_SIZE;
+            }
+
             if (const auto* mouseButtonPressed = event.getIf<sf::Event::MouseButtonPressed>()) {
-                if (mouseButtonPressed->button == sf::Mouse::Button::Left)
-                    if (mouseButtonPressed->position.y < GRID_HEIGHT * CELL_SIZE) {
+                if (mouseButtonPressed->button == sf::Mouse::Button::Left) {
+                    if (isPatternChecked) {
+                        game.setPattern(hoveringPos.x, hoveringPos.y, selectedPat);
+                        isPatternChecked = false;
+                    }
+                    else if (mouseButtonPressed->position.y < GRID_HEIGHT * CELL_SIZE) {
                         int x = mouseButtonPressed->position.x / CELL_SIZE;
                         int y = mouseButtonPressed->position.y / CELL_SIZE;
                         game.toggleCell(x, y);
                     }
+                }
+                else if(mouseButtonPressed->button == sf::Mouse::Button::Right) {
+                    isPatternChecked = false;
+                }
             }
         }
 
@@ -136,7 +169,21 @@ int main()
             }
         }
 
+        if (isPatternChecked) {
+            for (int i = 0; i < selectedPat.size(); i++){
+                for (int j = 0; j < selectedPat[i].size(); j++){
+                    if (selectedPat[i][j]){
+                        sf::RectangleShape ghost(sf::Vector2f(CELL_SIZE, CELL_SIZE));
+                        ghost.setPosition({static_cast<float>((hoveringPos.x + j) * CELL_SIZE), static_cast<float>((hoveringPos.y + i) * CELL_SIZE)});
+                        ghost.setFillColor(sf::Color(50, 50, 50));
+                        window.draw(ghost);
+                    }
+                }
+            }
+        }
+
         gui.draw();
         window.display();
     }
+    return 0;
 }

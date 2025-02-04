@@ -61,3 +61,15 @@ int GameOfLife::getAliveCells() const {
                 count++;
     return count;
 }
+
+void GameOfLife::setPattern(int x, int y, const std::vector<std::vector<int>>& pattern) {
+    for (int i = 0; i < pattern.size(); i++) {
+        for (int j = 0; j < pattern[i].size(); j++) {
+            int nx = x + j;
+            int ny = y + i;
+            if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                grid[ny][nx] = pattern[i][j];
+            }
+        }
+    }
+}

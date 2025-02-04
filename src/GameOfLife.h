@@ -15,6 +15,8 @@ public:
     int getGeneration() const {return generationCount;}
     int getAliveCells() const;
 
+    void setPattern(int x, int y, const std::vector<std::vector<int>>& pattern);
+
 private:
     int width, height;
     int generationCount = 0;
